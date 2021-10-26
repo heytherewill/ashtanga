@@ -1,16 +1,22 @@
-import { Chart, ChartConfiguration, ChartItem } from 'chart.js'
+import Chart from 'chart.js/auto';
+import { ChartConfiguration } from 'chart.js'
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
-import groupBy from 'lodash.groupby'
+import groupBy from 'lodash.groupby';
+
+// @ts-expect-error TS does not know about bundle-text directive
+import practiceCSV from 'bundle-text:./practice.csv';
+// @ts-expect-error TS does not know about bundle-text directive
+import asanaCSV from 'bundle-text:./asana.csv';
 
 let chartConfigurations: ChartConfiguration[] = [];
 
 Chart.register(MatrixController, MatrixElement);
 Chart.defaults.font = { family: "'Zen Maru Gothic', sans-serif" } as const;
 
-Promise.all([
-    fetch("practice.csv").then(response => response.text()),
-    fetch("asana.csv").then(response => response.text()),
-]).then(fetchedData => parseFilesAsData(fetchedData));
+parseFilesAsData([
+    practiceCSV,
+    asanaCSV,
+])
 
 function parseFilesAsData(fetchedData: [string, string]) {
     const rawTimeEntries = fetchedData[0];
@@ -40,7 +46,7 @@ function parseFilesAsData(fetchedData: [string, string]) {
 
 function loadGraphs(asana: Asana[], timeEntries: TimeEntry[]) {
 
-    chartConfigurations = [ 
+    chartConfigurations = [
         getHoursPracticedPerMonthBarChart(asana, timeEntries),
         getTypesOfPracticeDoughnutChart(timeEntries),
     ];
@@ -52,7 +58,7 @@ function loadGraphs(asana: Asana[], timeEntries: TimeEntry[]) {
 function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]) : ChartConfiguration {
 
     const groupFormatting = { month: 'short' } as const;
-    const hoursPracticedPerMonth = 
+    const hoursPracticedPerMonth =
         Object.fromEntries(
             Object.entries(
                 groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting))
@@ -90,8 +96,8 @@ function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntr
                                 .filter(a => a.dateLearned.getMonth() == month)
                                 .map(a => a.name);
 
-                            return asanaLearnedInMonth.length == 0 
-                                ? 'No new asana learned in that month' 
+                            return asanaLearnedInMonth.length == 0
+                                ? 'No new asana learned in that month'
                                 : ('Asana learned in that month: ' + asanaLearnedInMonth.join(', '))
                         },
                         label: context => {
@@ -124,12 +130,12 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]) : ChartConfig
             acc[labels.length] = 0;
             labels.push(group);
         }
-        
+
         const labelIndex = labels.indexOf(group);
         acc[labelIndex] += te.duration / 1000 / 60 / 24;
-        
+
         return acc;
-    }, []);
+    }, [] as number[]);
 
 
     return {
