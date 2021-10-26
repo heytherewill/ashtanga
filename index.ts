@@ -3,9 +3,7 @@ import { ChartConfiguration } from 'chart.js'
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import groupBy from 'lodash.groupby';
 
-// @ts-expect-error TS does not know about bundle-text directive
 import practiceCSV from 'bundle-text:./practice.csv';
-// @ts-expect-error TS does not know about bundle-text directive
 import asanaCSV from 'bundle-text:./asana.csv';
 
 let chartConfigurations: ChartConfiguration[] = [];
