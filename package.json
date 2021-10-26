@@ -1,0 +1,24 @@
+{
+  "name": "ashtanga",
+  "version": "1.0.0",
+  "description": "Statistics for my personal Ashtanga practice",
+  "main": "index.js",
+  "repository": "https://github.com/heytherewill/ashtanga.git",
+  "author": "William Barbosa <heytherewill@gmail.com>",
+  "license": "MIT",
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@types/lodash.groupby": "^4.6.6",
+    "parcel": "^2.0.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "chart.js": "3.6.0",
+    "chartjs-chart-matrix": "1.1.0",
+    "lodash.groupby": "^4.6.0"
+  }
+}
