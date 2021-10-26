@@ -1,5 +1,5 @@
 import Chart from 'chart.js/auto';
-import { ChartConfiguration } from 'chart.js'
+import { ChartConfiguration, BarController, BarElement, DoughnutController, LineController, LineElement } from 'chart.js'
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import groupBy from 'lodash.groupby';
 
@@ -8,17 +8,12 @@ import asanaCSV from 'bundle-text:./asana.csv';
 
 let chartConfigurations: ChartConfiguration[] = [];
 
-Chart.register(MatrixController, MatrixElement);
+Chart.register(DoughnutController, LineController, LineElement, BarController, BarElement, MatrixController, MatrixElement);
 Chart.defaults.font = { family: "'Zen Maru Gothic', sans-serif" } as const;
 
-parseFilesAsData([
-    practiceCSV,
-    asanaCSV,
-])
+parseFilesAsData(practiceCSV, asanaCSV)
 
-function parseFilesAsData(fetchedData: [string, string]) {
-    const rawTimeEntries = fetchedData[0];
-    const rawAsana = fetchedData[1];
+function parseFilesAsData(rawTimeEntries: string, rawAsana: string) {
     const timeEntries: TimeEntry[] = rawTimeEntries.split(/\r\n|\n/).map((entry: string) => {
         const entryComponents = entry.split(',');
         const startDate = new Date(entryComponents[1]);
@@ -53,33 +48,29 @@ function loadGraphs(asana: Asana[], timeEntries: TimeEntry[]) {
     new Chart(context, chartConfigurations[0]);
 }
 
-function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]) : ChartConfiguration {
+function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]) : ChartConfiguration<'bar' | 'line'> {
 
     const groupFormatting = { month: 'short' } as const;
     const hoursPracticedPerMonth =
         Object.fromEntries(
             Object.entries(
                 groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting))
-            ).map(([key, value]) => [key, value.map(te => te.duration / 1000 / 60 / 24)])
+            ).map(([key, value]) => [key, value.map(te => te.duration / 1000 / 60 / 24).reduce((a, b)=> a+b)])
         );
 
     return {
+        type: 'bar',
         data: {
             datasets: [{
                 type: 'line',
-                label: {
-                    display: false
-                },
-                data: hoursPracticedPerMonth,
+                data: Object.values(hoursPracticedPerMonth),
                 fill: false,
                 backgroundColor: '#BF94E4',
                 tension: 0.1
             }, {
                 type: 'bar',
-                data: hoursPracticedPerMonth,
-                fill: false,
-                backgroundColor: '#BF94E4',
-                tension: 0.1
+                data: Object.values(hoursPracticedPerMonth),
+                backgroundColor: '#BF94E4'
             } ]
         },
         options: {
@@ -119,7 +110,7 @@ function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntr
     };
 }
 
-function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]) : ChartConfiguration {
+function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]) : ChartConfiguration<'doughnut'> {
 
     const labels: string[] = []
     const typesOfPractice = timeEntries.reduce((acc, te) => {
