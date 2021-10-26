@@ -1,20 +1,21 @@
+import type { Asana, TimeEntry, State } from './models'
 import Chart from 'chart.js/auto';
 import { ChartConfiguration, BarController, BarElement, DoughnutController, LineController, LineElement } from 'chart.js'
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import groupBy from 'lodash.groupby';
 
-import practiceCSV from 'bundle-text:./practice.csv';
-import asanaCSV from 'bundle-text:./asana.csv';
+import practiceCSV from 'bundle-text:../data/practice.csv';
+import asanaCSV from 'bundle-text:../data/asana.csv';
 
 let chartConfigurations: ChartConfiguration[] = [];
 
 Chart.register(DoughnutController, LineController, LineElement, BarController, BarElement, MatrixController, MatrixElement);
 Chart.defaults.font = { family: "'Zen Maru Gothic', sans-serif" } as const;
 
-parseFilesAsData(practiceCSV, asanaCSV)
+parseCsvAsState(practiceCSV, asanaCSV)
 
-function parseFilesAsData(rawTimeEntries: string, rawAsana: string) {
-    const timeEntries: TimeEntry[] = rawTimeEntries.split(/\r\n|\n/).map((entry: string) => {
+function parseCsvAsState(csvTimeEntries: string, csvAsana: string) {
+    const timeEntries: TimeEntry[] = csvTimeEntries.split(/\r\n|\n/).map((entry: string) => {
         const entryComponents = entry.split(',');
         const startDate = new Date(entryComponents[1]);
         const endDate = new Date(entryComponents[2]);
@@ -26,7 +27,7 @@ function parseFilesAsData(rawTimeEntries: string, rawAsana: string) {
         }
     });
 
-    const asana: Asana[] = rawAsana.split(/\r\n|\n/).map(entry => {
+    const asana: Asana[] = csvAsana.split(/\r\n|\n/).map(entry => {
         const entryComponents = entry.split(',');
         return {
             name: entryComponents[0],
@@ -34,14 +35,19 @@ function parseFilesAsData(rawTimeEntries: string, rawAsana: string) {
         }
     });
 
-    loadGraphs(asana, timeEntries);
+    const state = {
+        asana: asana,
+        timeEntries: timeEntries
+    }
+
+    loadGraphs(state);
 }
 
-function loadGraphs(asana: Asana[], timeEntries: TimeEntry[]) {
+function loadGraphs(state: State) {
 
     chartConfigurations = [
-        getHoursPracticedPerMonthBarChart(asana, timeEntries),
-        getTypesOfPracticeDoughnutChart(timeEntries),
+        getHoursPracticedPerMonthBarChart(state.asana, state.timeEntries),
+        getTypesOfPracticeDoughnutChart(state.timeEntries),
     ];
 
     const context = document.getElementById('chart') as HTMLCanvasElement;
@@ -142,16 +148,4 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]) : ChartConfig
             }]
         }
     };
-}
-
-interface TimeEntry {
-    description: string
-    startDate: Date
-    endDate: Date
-    duration: number
-}
-
-interface Asana {
-    name: string
-    dateLearned: Date
 }

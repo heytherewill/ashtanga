@@ -6,7 +6,7 @@
   "repository": "https://github.com/heytherewill/ashtanga.git",
   "author": "William Barbosa <heytherewill@gmail.com>",
   "license": "MIT",
-  "source": "index.html",
+  "source": "src/index.html",
   "scripts": {
     "start": "parcel",
     "build": "parcel build"
