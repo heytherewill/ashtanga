@@ -1,17 +1,17 @@
 :root {
-    --background: #E7D5C6;
-    --foreground: #BF94E4;
-    font-family: 'Zen Maru Gothic', sans-serif;
+  --background: #e7d5c6;
+  --foreground: #bf94e4;
+  font-family: "Zen Maru Gothic", sans-serif;
 }
 
 html {
-    background: var(--background);
+  background: var(--background);
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 #container {
-    padding: 0px 200px;
+  padding: 0px 200px;
 }
