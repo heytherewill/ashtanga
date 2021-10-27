@@ -1,13 +1,12 @@
 import type { Asana, TimeEntry, State } from "./models";
-import Chart from "chart.js/auto";
-import {
+import Chart, {
   ChartConfiguration,
   BarController,
   BarElement,
   DoughnutController,
   LineController,
   LineElement,
-} from "chart.js";
+} from "chart.js/auto";
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
 import groupBy from "lodash.groupby";
 
@@ -89,6 +88,7 @@ function getHoursPracticedPerMonthBarChart(
   return {
     type: "bar",
     data: {
+      labels: Object.keys(hoursPracticedPerMonth),
       datasets: [
         {
           type: "line",
