@@ -1,29 +1,12 @@
 import type { Asana, TimeEntry, State } from "./models";
-import Chart, {
-  ChartConfiguration,
-  BarController,
-  BarElement,
-  DoughnutController,
-  LineController,
-  LineElement,
-} from "chart.js/auto";
-import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
+import Chart, { ChartConfiguration } from "chart.js/auto";
 import groupBy from "lodash.groupby";
 
-import practiceCSV from "bundle-text:../data/practice.csv";
-import asanaCSV from "bundle-text:../data/asana.csv";
+import practiceCSV from "../data/practice.csv";
+import asanaCSV from "../data/asana.csv";
 
 let chartConfigurations: ChartConfiguration[] = [];
 
-Chart.register(
-  DoughnutController,
-  LineController,
-  LineElement,
-  BarController,
-  BarElement,
-  MatrixController,
-  MatrixElement
-);
 Chart.defaults.font = { family: "'Zen Maru Gothic', sans-serif" } as const;
 
 parseCsvAsState(practiceCSV, asanaCSV);
