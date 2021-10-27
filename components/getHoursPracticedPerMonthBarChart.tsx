@@ -1,5 +1,6 @@
 import { ChartConfiguration } from 'chart.js/auto';
 import groupBy from 'lodash.groupby';
+import { getColors } from '../data/colors';
 import { State } from '../types';
 
 export function getHoursPracticedPerMonthBarChart({ asana, timeEntries }: State): ChartConfiguration<'bar' | 'line'> {
@@ -10,6 +11,8 @@ export function getHoursPracticedPerMonthBarChart({ asana, timeEntries }: State)
         ),
     );
 
+    const colors = getColors()
+
     return {
         type: 'bar',
         data: {
@@ -19,13 +22,13 @@ export function getHoursPracticedPerMonthBarChart({ asana, timeEntries }: State)
                     type: 'line',
                     data: Object.values(hoursPracticedPerMonth),
                     fill: false,
-                    backgroundColor: '#BF94E4',
+                    backgroundColor: colors.foreground,
                     tension: 0.1,
                 },
                 {
                     type: 'bar',
                     data: Object.values(hoursPracticedPerMonth),
-                    backgroundColor: '#BF94E4',
+                    backgroundColor: colors.foreground,
                 },
             ],
         },
