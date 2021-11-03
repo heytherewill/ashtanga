@@ -1,10 +1,18 @@
 :root {
-    --background: #e7d5c6;
-    --foreground: #bf94e4;
+    --background: #fcece4;
+    --foreground: #C8BFD9;
+    --onBackground: #222323;
+    --chartBorder: #555555;
     font-family: 'Zen Maru Gothic', sans-serif;
+    color: var(--onBackground);
 }
 
 html {
+    max-width: 120ch;
+    padding: 3em 1em;
+    margin: auto;
+    line-height: 1.75;
+    font-size: 1.25em;
     background: var(--background);
 }
 
@@ -17,4 +25,11 @@ h1 {
     min-height: 100vh;
     display: grid;
     place-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background:#222323;
+        --onBackground: #D3D3D3;
+    }
 }

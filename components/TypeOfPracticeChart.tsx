@@ -3,8 +3,10 @@ import { State } from '../types';
 import { ChartCanvas } from './ChartCanvas';
 import { ChartConfiguration } from 'chart.js/auto';
 import { TimeEntry } from '../types';
+import { getColors } from '../data/colors';
 
 function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfiguration<'doughnut'> {
+    const colors = getColors();
     const labels: string[] = [];
     const typesOfPractice = timeEntries.reduce((acc, te) => {
         const group = te.description;
@@ -26,11 +28,20 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfigu
             datasets: [
                 {
                     data: typesOfPractice,
-                    backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
+                    borderColor: colors.chartBorder,
+                    backgroundColor: ['#FFC2C8', '#C8BFD9', '#75D1C6'],
                     hoverOffset: 4,
                 },
             ],
         },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+            }
+        }
     };
 }
 

@@ -65,8 +65,22 @@ export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: T
             },
             scales: {
                 x: {
-                    grid: { display: false },
+                    grid: { 
+                        display: false,
+                        color: colors.chartBorder
+                    },
+                    ticks: {
+                        color: colors.onBackground
+                    }
                 },
+                y : {
+                    grid: {
+                        color: colors.chartBorder
+                    },
+                    ticks: {
+                        color: colors.onBackground
+                    }
+                }
             },
         },
     };
