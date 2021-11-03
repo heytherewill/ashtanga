@@ -2,11 +2,12 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 
-import { YogaChart } from '../components/YogaChart';
-import { useCSVState } from '../data/useCSVState';
+import { HoursPracticedChart } from '../components/HoursPracticedChart';
+import { TypeOfPracticeChart } from '../components/TypeOfPracticeChart';
+import { LoadState } from '../data/loadState';
 
 const Home: NextPage = () => {
-    const state = useCSVState();
+    const state = LoadState();
 
     return (
         <React.Fragment>
@@ -14,10 +15,14 @@ const Home: NextPage = () => {
                 <title>{"Will's Yoga Statistics"}</title>
             </Head>
 
-            <h1>Hours Practiced</h1>
             <div id="container">
                 {!state && <h1>Loading...</h1>}
-                {state && <YogaChart state={state} type="bar" />}
+                {state && (
+                    <React.Fragment>
+                        <HoursPracticedChart asana={state.asana} timeEntries={state.timeEntries} />
+                        <TypeOfPracticeChart timeEntries={state.timeEntries} />
+                    </React.Fragment>
+                )}
             </div>
         </React.Fragment>
     );

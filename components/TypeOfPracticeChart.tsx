@@ -1,7 +1,10 @@
+import React from 'react';
+import { State } from '../types';
+import { ChartCanvas } from './ChartCanvas';
 import { ChartConfiguration } from 'chart.js/auto';
 import { TimeEntry } from '../types';
 
-export function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfiguration<'doughnut'> {
+function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfiguration<'doughnut'> {
     const labels: string[] = [];
     const typesOfPractice = timeEntries.reduce((acc, te) => {
         const group = te.description;
@@ -30,3 +33,16 @@ export function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): Chart
         },
     };
 }
+
+interface TypeOfPracticeChartProps {
+    timeEntries: TimeEntry[];
+}
+
+export const TypeOfPracticeChart = ({timeEntries}: TypeOfPracticeChartProps,) => {
+    return (
+        <React.Fragment>
+            <h1>Types of Practice</h1>
+            <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries)} />
+        </React.Fragment>
+    );
+};

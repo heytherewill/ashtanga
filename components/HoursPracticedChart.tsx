@@ -1,12 +1,15 @@
-import { ChartConfiguration } from 'chart.js/auto';
+import React from 'react';
+import { Asana, State, TimeEntry } from '../types';
+import { ChartCanvas } from './ChartCanvas';
 import groupBy from 'lodash.groupby';
 import { getColors } from '../data/colors';
-import { State } from '../types';
+import { ChartConfiguration } from 'chart.js/auto';
 
-export function getHoursPracticedPerMonthBarChart({ asana, timeEntries }: State): ChartConfiguration<'bar' | 'line'> {
+export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]): ChartConfiguration<'bar' | 'line'> {
     const groupFormatting = { month: 'short' } as const;
+    const groupedTimeEntries = groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting));
     const hoursPracticedPerMonth = Object.fromEntries(
-        Object.entries(groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting))).map(
+        Object.entries(groupedTimeEntries).map(
             ([key, value]) => [key, value.map((te) => te.duration / 1000 / 60 / 24).reduce((a, b) => a + b)],
         ),
     );
@@ -68,3 +71,17 @@ export function getHoursPracticedPerMonthBarChart({ asana, timeEntries }: State)
         },
     };
 }
+
+interface HoursPracticedChartProps {
+    timeEntries: TimeEntry[];
+    asana: Asana[];
+}
+
+export const HoursPracticedChart = ({ timeEntries, asana }: HoursPracticedChartProps) => {
+    return (
+        <React.Fragment>
+            <h1>Hours Practiced</h1>
+            <ChartCanvas {...getHoursPracticedPerMonthBarChart(asana, timeEntries)} />
+        </React.Fragment>
+    );
+};

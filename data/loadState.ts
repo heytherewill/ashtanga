@@ -1,7 +1,7 @@
 import React from 'react';
 import { Asana, State, TimeEntry } from '../types';
 
-export const useCSVState = () => {
+export const LoadState = () => {
     const [state, setState] = React.useState<State | null>(null);
 
     React.useEffect(() => {
