@@ -1,20 +1,23 @@
 import React from 'react';
-import { Asana, State, TimeEntry } from '../types';
+import { Asana, TimeEntry } from '../types';
 import { ChartCanvas } from './ChartCanvas';
 import groupBy from 'lodash.groupby';
-import { getColors } from '../data/colors';
+import { Colors, useColors } from '../data/colors';
 import { ChartConfiguration } from 'chart.js/auto';
 
-export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]): ChartConfiguration<'bar' | 'line'> {
+export function getHoursPracticedPerMonthBarChart(
+    asana: Asana[],
+    timeEntries: TimeEntry[],
+    colors: Colors,
+): ChartConfiguration<'bar' | 'line'> {
     const groupFormatting = { month: 'short' } as const;
     const groupedTimeEntries = groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting));
     const hoursPracticedPerMonth = Object.fromEntries(
-        Object.entries(groupedTimeEntries).map(
-            ([key, value]) => [key, value.map((te) => te.duration / 1000 / 60 / 24).reduce((a, b) => a + b)],
-        ),
+        Object.entries(groupedTimeEntries).map(([key, value]) => [
+            key,
+            value.map((te) => te.duration / 1000 / 60 / 24).reduce((a, b) => a + b),
+        ]),
     );
-
-    const colors = getColors()
 
     return {
         type: 'bar',
@@ -65,22 +68,22 @@ export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: T
             },
             scales: {
                 x: {
-                    grid: { 
-                        display: false,
-                        color: colors.chartBorder
-                    },
-                    ticks: {
-                        color: colors.onBackground
-                    }
-                },
-                y : {
                     grid: {
-                        color: colors.chartBorder
+                        display: false,
+                        color: colors.chartBorder,
                     },
                     ticks: {
-                        color: colors.onBackground
-                    }
-                }
+                        color: colors.onBackground,
+                    },
+                },
+                y: {
+                    grid: {
+                        color: colors.chartBorder,
+                    },
+                    ticks: {
+                        color: colors.onBackground,
+                    },
+                },
             },
         },
     };
@@ -92,10 +95,11 @@ interface HoursPracticedChartProps {
 }
 
 export const HoursPracticedChart = ({ timeEntries, asana }: HoursPracticedChartProps) => {
+    const colors = useColors();
     return (
         <React.Fragment>
             <h1>Hours Practiced</h1>
-            <ChartCanvas {...getHoursPracticedPerMonthBarChart(asana, timeEntries)} />
+            <ChartCanvas {...getHoursPracticedPerMonthBarChart(asana, timeEntries, colors)} />
         </React.Fragment>
     );
 };

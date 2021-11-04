@@ -1,12 +1,10 @@
 import React from 'react';
-import { State } from '../types';
 import { ChartCanvas } from './ChartCanvas';
 import { ChartConfiguration } from 'chart.js/auto';
 import { TimeEntry } from '../types';
-import { getColors } from '../data/colors';
+import { Colors, useColors } from '../data/colors';
 
-function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfiguration<'doughnut'> {
-    const colors = getColors();
+function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[], colors: Colors): ChartConfiguration<'doughnut'> {
     const labels: string[] = [];
     const typesOfPractice = timeEntries.reduce((acc, te) => {
         const group = te.description;
@@ -38,10 +36,10 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[]): ChartConfigu
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: false,
                 },
-            }
-        }
+            },
+        },
     };
 }
 
@@ -49,11 +47,12 @@ interface TypeOfPracticeChartProps {
     timeEntries: TimeEntry[];
 }
 
-export const TypeOfPracticeChart = ({timeEntries}: TypeOfPracticeChartProps,) => {
+export const TypeOfPracticeChart = ({ timeEntries }: TypeOfPracticeChartProps) => {
+    const colors = useColors();
     return (
         <React.Fragment>
             <h1>Types of Practice</h1>
-            <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries)} />
+            <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries, colors)} />
         </React.Fragment>
     );
 };
