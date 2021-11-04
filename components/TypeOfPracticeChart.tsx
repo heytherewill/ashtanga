@@ -36,10 +36,10 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[], colors: Color
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: false,
                 },
-            }
-        }
+            },
+        },
     };
 }
 
@@ -47,7 +47,7 @@ interface TypeOfPracticeChartProps {
     timeEntries: TimeEntry[];
 }
 
-export const TypeOfPracticeChart = ({ timeEntries }: TypeOfPracticeChartProps,) => {
+export const TypeOfPracticeChart = ({ timeEntries }: TypeOfPracticeChartProps) => {
     const colors = useColors();
     return (
         <React.Fragment>

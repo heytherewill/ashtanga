@@ -35,13 +35,13 @@ export const useColors = (): Colors => {
 
     useEffect(() => {
         const themeChangeHandler = (e: MediaQueryListEvent) => {
-          setColors(getColors());
+            setColors(getColors());
         };
         prefersDarkTheme?.addEventListener('change', themeChangeHandler);
         return () => {
-          prefersDarkTheme?.removeEventListener('change', themeChangeHandler);
+            prefersDarkTheme?.removeEventListener('change', themeChangeHandler);
         };
-      }, []);
+    }, []);
 
     return colors;
 };
