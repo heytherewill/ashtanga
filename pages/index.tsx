@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { DaysPracticedMatrixChartProps } from '../components/DaysPracticedMatrixChart';
 
 import { HoursPracticedChart } from '../components/HoursPracticedChart';
 import { TypeOfPracticeChart } from '../components/TypeOfPracticeChart';

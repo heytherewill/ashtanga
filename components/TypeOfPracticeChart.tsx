@@ -27,8 +27,8 @@ function getTypesOfPracticeDoughnutChart(timeEntries: TimeEntry[], colors: Color
                 {
                     data: typesOfPractice,
                     borderColor: colors.chartBorder,
-                    backgroundColor: ['#FFC2C8', '#C8BFD9', '#75D1C6'],
                     hoverOffset: 4,
+                    backgroundColor: [ '#22b1eb', '#0692cd', '#42c5f8'],
                 },
             ],
         },
