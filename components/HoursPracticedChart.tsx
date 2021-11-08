@@ -5,7 +5,7 @@ import groupBy from 'lodash.groupby';
 import { getColors } from '../data/colors';
 import { ChartConfiguration } from 'chart.js/auto';
 
-export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]): ChartConfiguration<'bar' | 'line'> {
+function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: TimeEntry[]): ChartConfiguration<'bar' | 'line'> {
     const groupFormatting = { month: 'short' } as const;
     const groupedTimeEntries = groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting));
     const hoursPracticedPerMonth = Object.fromEntries(
@@ -56,8 +56,8 @@ export function getHoursPracticedPerMonthBarChart(asana: Asana[], timeEntries: T
                             const fullHours = Math.trunc(rawHours);
                             const remainder = rawHours - fullHours;
                             const minutes = Math.trunc(60 * remainder);
-
-                            return fullHours + 'h' + String(minutes).padStart(2, '0');
+                            const formattedMinutes = String(minutes).padStart(2, '0');
+                            return fullHours + 'h' + formattedMinutes + 'm';
                         },
                     },
                 },
