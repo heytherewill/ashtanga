@@ -21,6 +21,7 @@ const Home: NextPage = () => {
                     <React.Fragment>
                         <HoursPracticedChart asana={state.asana} timeEntries={state.timeEntries} />
                         <TypeOfPracticeChart timeEntries={state.timeEntries} />
+                        <DaysPracticedMatrixChartProps timeEntries={state.timeEntries} />
                     </React.Fragment>
                 )}
             </div>
