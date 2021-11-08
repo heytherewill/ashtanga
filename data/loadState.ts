@@ -16,6 +16,7 @@ export const LoadState = () => {
                 return {
                     name: entryComponents[0],
                     dateLearned: new Date(entryComponents[1]),
+                    series: entryComponents[2] == '2' ? 'intermediate' : 'primary'
                 };
             });
 

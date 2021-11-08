@@ -8,6 +8,7 @@ export interface TimeEntry {
 export interface Asana {
     name: string;
     dateLearned: Date;
+    series: ('primary' | 'intermediate');
 }
 
 export interface State {
