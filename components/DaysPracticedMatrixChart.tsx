@@ -56,18 +56,31 @@ function getDaysPracticedMatrixChart(
         datasets: [{
             data: zeData,
             backgroundColor: (context: { raw: { v: number; }; }) => {
+                const duration = context.raw.v;
+                if (duration == 0) {
+                    return colors.chartBorder;
+                }
                 const alpha = context.raw.v / longestDuration;
                 const result = changeColorAlpha(colors.foreground, alpha).toString();
                 return result;
             },
+            borderRadius: 3,
             borderWidth: 1,
-            borderColor: colors.chartBorder,
+            borderColor: (context: { raw: { v: number; }; }) => {
+                const duration = context.raw.v;
+                if (duration == 0) {
+                    return colors.chartBorder;
+                }
+                const alpha = context.raw.v / longestDuration;
+                const result = changeColorAlpha(colors.foreground, alpha).toString();
+                return result;
+            },
             hoverBackgroundColor: colors.foreground,
-            hoverBorderColor: colors.chartBorder,
+            hoverBorderColor: colors.foreground,
             //@ts-expect-error
             width: (context) => (context.chart.chartArea || {}).width / 62,
             //@ts-expect-error
-            height: (context) => (context.chart.chartArea || {}).height / 10
+            height: (context) => (context.chart.chartArea || {}).height / 12
         }]
     };
 
@@ -81,7 +94,7 @@ function getDaysPracticedMatrixChart(
                 round: 'week',
                 isoWeekday: 1,
                 displayFormats: {
-                    week: 'ddMMM'
+                    month: 'MMM'
                 }
             },
             ticks: {
@@ -106,7 +119,7 @@ function getDaysPracticedMatrixChart(
                 parser: 'iiii',
                 isoWeekday: 1,
                 displayFormats: {
-                    day: 'iiii'
+                    day: 'iii'
                 }
             },
             

@@ -1,6 +1,8 @@
 :root {
     --background: #fcece4;
     --foreground: #22b1eb;
+    --foregroundDarker: #0692cd;
+    --foregroundLighter: #42c5f8;
     --onBackground: #222323;
     --chartBorder: #555555;
     font-family: 'Zen Maru Gothic', sans-serif;
@@ -8,7 +10,6 @@
 }
 
 html {
-    max-width: 120ch;
     padding: 3em 1em;
     margin: auto;
     line-height: 1.75;
@@ -20,8 +21,29 @@ h1 {
     text-align: center;
 }
 
+h6 {
+    display: inline-block;
+}
+
+h6::before {
+    content: '';
+    background: var(--foreground);
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    display: inline-flex;
+    margin: 0px 10px;
+}
+
+h6.instructed::before {
+    background: var(--foregroundDarker);
+}
+
+h6.guided::before {
+    background: var(--foregroundLighter);
+}
+
 #container {
-    padding: 0px 200px;
     min-height: 100vh;
     display: grid;
     place-items: center;
