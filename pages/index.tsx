@@ -3,8 +3,8 @@ import Head from 'next/head';
 import React from 'react';
 
 import { DaysPracticedMatrixChart } from '../components/DaysPracticedMatrixChart';
-import { TypeOfPracticeChart } from '../components/TypeOfPracticeChart';
 import { HoursPracticedBarChart } from '../components/HoursPracticedBarChart';
+import { TypeOfPracticeDoughnutChart } from '../components/TypeOfPracticeDoughnutChart';
 import { LoadState } from '../data/loadState';
 
 const Home: NextPage = () => {
@@ -13,15 +13,15 @@ const Home: NextPage = () => {
     return (
         <React.Fragment>
             <Head>
-                <title>{"Will's Yoga Statistics"}</title>
+                <title>{"Will's Ashtanga Stats"}</title>
             </Head>
 
             <div id="container">
                 {!state && <h1>Loading...</h1>}
                 {state && (
                     <React.Fragment>
-                        <TypeOfPracticeChart timeEntries={state.timeEntries} />
                         <HoursPracticedBarChart asana={state.asana} timeEntries={state.timeEntries} />
+                        <TypeOfPracticeDoughnutChart timeEntries={state.timeEntries} />
                         <DaysPracticedMatrixChart timeEntries={state.timeEntries} moondays={state.moondays} />
                     </React.Fragment>
                 )}

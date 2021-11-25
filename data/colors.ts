@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 export interface Colors {
     background: string;
     foreground: string;
+    foregroundLighter: string;
+    foregroundDarker: string;
     onBackground: string;
     chartBorder: string;
     moondays: string;
@@ -26,6 +28,8 @@ const getColors = (): Colors => {
         foreground: documentElement.getPropertyValue('--foreground').trim(),
         onBackground: documentElement.getPropertyValue('--onBackground').trim(),
         chartBorder: documentElement.getPropertyValue('--chartBorder').trim(),
+        foregroundLighter: documentElement.getPropertyValue('--foregroundLighter').trim(),
+        foregroundDarker: documentElement.getPropertyValue('--foregroundDarker').trim(),
         moondays: documentElement.getPropertyValue('--moondays').trim(),
     };
 };
