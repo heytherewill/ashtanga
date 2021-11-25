@@ -1,23 +1,32 @@
 import React from 'react';
-import { Asana, State, TimeEntry } from '../types';
+import { Moonday, TimeEntry } from '../types';
 import { ChartCanvas } from './ChartCanvas';
 import { ChartConfiguration } from 'chart.js/auto';
-import { _adapters, Chart, ChartDataset } from 'chart.js';
-import { MatrixController, MatrixDataPoint, MatrixElement } from 'chartjs-chart-matrix';
+import { _adapters, Chart, TooltipItem } from 'chart.js';
+import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 import getDayOfYear from 'date-fns/getDayOfYear'
 import setDayOfYear from 'date-fns/setDayOfYear'
 import format from 'date-fns/format';
 import changeColorAlpha from 'color-alpha'
 import 'chartjs-adapter-date-fns';
 import { Colors, useColors } from '../data/colors';
+import { formatHoursForDisplay } from './Common';
+import { isSameDay } from 'date-fns';
 
 function daysInYear(year: number) : (365 | 366) {
     const isLeapYear = year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
     return isLeapYear ? 366 : 365;
 }
 
+function colorWithProportionalAlpha(color: string, value: number, maxValue: number) : string {
+    const alpha = value / maxValue;
+    const result = changeColorAlpha(color, alpha).toString();
+    return result;
+}
+
 function getDaysPracticedMatrixChart(
     timeEntries: TimeEntry[],
+    moondays: Moonday[],
     colors: Colors
 ): ChartConfiguration<'matrix'> {
 
@@ -28,7 +37,7 @@ function getDaysPracticedMatrixChart(
     const hoursPracticedPerDayOfYear = timeEntries.reduce((acc, te) => 
     {
         const dayOfYear = getDayOfYear(te.startDate);
-        const duration = te.duration / 1000 / 60;
+        const duration = te.duration / 1000 / 60 / 24;
         acc[dayOfYear] = duration;
 
         if (duration > longestDuration) {
@@ -46,28 +55,42 @@ function getDaysPracticedMatrixChart(
 
         return {
             y: formattedDayOfWeek,
-            x: formattedDate,
-            d: formattedDate,
-            v: hoursPracticedPerDayOfYear[index] ?? 0
+            x: formattedDate
         };
     });
 
     const data = {
         datasets: [{
             data: zeData,
-            backgroundColor: (context: { raw: { v: number; }; }) => {
-                const alpha = context.raw.v / longestDuration;
-                const result = changeColorAlpha(colors.foreground, alpha).toString();
-                return result;
+            backgroundColor: (context: { dataIndex: number; }) => {
+                const dayOfYear = setDayOfYear(now, context.dataIndex);
+                const isMoonday = moondays.some(m => isSameDay(m.date, dayOfYear))
+                if (isMoonday)
+                    return colors.moondays;
+                
+                const hoursPracticed = hoursPracticedPerDayOfYear[context.dataIndex] ?? 0;
+                if (hoursPracticed == 0)
+                    return colors.chartBorder;
+
+                return colorWithProportionalAlpha(colors.foreground, hoursPracticed, longestDuration);
             },
-            borderWidth: 1,
-            borderColor: colors.chartBorder,
+            borderRadius: 3,
+            borderWidth: 2,
+            borderColor: (context: { dataIndex: number; }) => {
+                const dayOfYear = setDayOfYear(now, context.dataIndex);
+                const isMoonday = moondays.some(m => isSameDay(m.date, dayOfYear))
+                const hoursPracticed = hoursPracticedPerDayOfYear[context.dataIndex] ?? 0;
+
+                return hoursPracticed == 0
+                    ? (isMoonday ? colors.moondays : colors.chartBorder)
+                    : colorWithProportionalAlpha(colors.foreground, hoursPracticed, longestDuration);
+            },
             hoverBackgroundColor: colors.foreground,
-            hoverBorderColor: colors.chartBorder,
-            //@ts-expect-error
+            hoverBorderColor: colors.foreground,
+            // @ts-expect-error
             width: (context) => (context.chart.chartArea || {}).width / 62,
-            //@ts-expect-error
-            height: (context) => (context.chart.chartArea || {}).height / 10
+            // @ts-expect-error
+            height: (context) => (context.chart.chartArea || {}).height / 12
         }]
     };
 
@@ -81,7 +104,7 @@ function getDaysPracticedMatrixChart(
                 round: 'week',
                 isoWeekday: 1,
                 displayFormats: {
-                    week: 'ddMMM'
+                    month: 'MMM'
                 }
             },
             ticks: {
@@ -106,7 +129,7 @@ function getDaysPracticedMatrixChart(
                 parser: 'iiii',
                 isoWeekday: 1,
                 displayFormats: {
-                    day: 'iiii'
+                    day: 'iii'
                 }
             },
             
@@ -131,13 +154,18 @@ function getDaysPracticedMatrixChart(
             tooltip: {
                 displayColors: false,
                 callbacks: {
-                    title() {
-                        return '';
-                    },
-                    // @ts-expect-error
-                    label(context) {
-                        const v = context.dataset.data[context.dataIndex];
-                        return ['d: ' + v.d, 'v: ' + v.v.toFixed(2)];
+                    title: () => '',
+                    label: (context: TooltipItem<'matrix'>) => {
+                        const dayOfYear = setDayOfYear(now, context.dataIndex);
+                        const moonday = moondays.find(m => isSameDay(m.date, dayOfYear))
+                        const moondayInfo = moonday == undefined ? [] : [ 'This is a ' + moonday.kind + ' moon day.' ]
+
+                        const hoursPracticed = hoursPracticedPerDayOfYear[context.dataIndex] ?? 0;
+                        const practiceInfo = hoursPracticed == 0 
+                            ? [ 'No practice registered for this day.' ] 
+                            : [ 'Practiced for ' + formatHoursForDisplay(hoursPracticed) ];
+
+                        return moondayInfo.concat(practiceInfo);
                     }
                 }
             },
@@ -161,15 +189,16 @@ function getDaysPracticedMatrixChart(
 
 interface DaysPracticedMatrixChartProps {
     timeEntries: TimeEntry[];
+    moondays: Moonday[];
 }
 
-export const DaysPracticedMatrixChartProps = ({ timeEntries }: DaysPracticedMatrixChartProps) => {
+export const DaysPracticedMatrixChart = ({ timeEntries, moondays, }: DaysPracticedMatrixChartProps) => {
     Chart.register(MatrixController, MatrixElement);
     const colors = useColors();
     return (
         <React.Fragment>
             <h1>Days Practiced</h1>
-            <ChartCanvas {...getDaysPracticedMatrixChart(timeEntries, colors)} />
+            <ChartCanvas {...getDaysPracticedMatrixChart(timeEntries, moondays, colors)} />
         </React.Fragment>
     );
 };

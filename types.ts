@@ -14,4 +14,10 @@ export interface Asana {
 export interface State {
     timeEntries: TimeEntry[];
     asana: Asana[];
+    moondays: Moonday[];
+}
+
+export interface Moonday {
+    date: Date;
+    kind: ('new' | 'full')
 }

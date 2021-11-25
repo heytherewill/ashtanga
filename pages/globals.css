@@ -3,6 +3,7 @@
     --foreground: #22b1eb;
     --onBackground: #222323;
     --chartBorder: #555555;
+    --moondays: #D5D5BF;
     font-family: 'Zen Maru Gothic', sans-serif;
     color: var(--onBackground);
 }

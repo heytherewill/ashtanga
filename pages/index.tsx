@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { DaysPracticedMatrixChartProps } from '../components/DaysPracticedMatrixChart';
 
-import { HoursPracticedChart } from '../components/HoursPracticedChart';
+import { DaysPracticedMatrixChart } from '../components/DaysPracticedMatrixChart';
 import { TypeOfPracticeChart } from '../components/TypeOfPracticeChart';
+import { HoursPracticedBarChart } from '../components/HoursPracticedBarChart';
 import { LoadState } from '../data/loadState';
 
 const Home: NextPage = () => {
@@ -20,9 +20,9 @@ const Home: NextPage = () => {
                 {!state && <h1>Loading...</h1>}
                 {state && (
                     <React.Fragment>
-                        <HoursPracticedChart asana={state.asana} timeEntries={state.timeEntries} />
                         <TypeOfPracticeChart timeEntries={state.timeEntries} />
-                        <DaysPracticedMatrixChartProps timeEntries={state.timeEntries} />
+                        <HoursPracticedBarChart asana={state.asana} timeEntries={state.timeEntries} />
+                        <DaysPracticedMatrixChart timeEntries={state.timeEntries} moondays={state.moondays} />
                     </React.Fragment>
                 )}
             </div>

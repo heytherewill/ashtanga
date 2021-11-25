@@ -4,19 +4,22 @@ import { ChartCanvas } from './ChartCanvas';
 import groupBy from 'lodash.groupby';
 import { Colors, useColors } from '../data/colors';
 import { ChartConfiguration } from 'chart.js/auto';
+import { formatHoursForDisplay } from './Common';
 
-export function getHoursPracticedPerMonthBarChart(
+function getHoursPracticedPerMonthBarChart(
     asana: Asana[],
     timeEntries: TimeEntry[],
     colors: Colors,
-): ChartConfiguration<'bar' | 'line'> {
+) : ChartConfiguration<'bar' | 'line'> {
     const groupFormatting = { month: 'short' } as const;
     const groupedTimeEntries = groupBy(timeEntries, (te) => te.startDate.toLocaleString('en-us', groupFormatting));
     const hoursPracticedPerMonth = Object.fromEntries(
-        Object.entries(groupedTimeEntries).map(([key, value]) => [
-            key,
-            value.map((te) => te.duration / 1000 / 60 / 24).reduce((a, b) => a + b),
-        ]),
+        Object.entries(groupedTimeEntries).map(([key, value]) => {
+            const totalHoursPracticeInGroup = value
+                .map((te) => te.duration / 1000 / 60 / 24)
+                .reduce((a, b) => a + b);
+            return [ key, totalHoursPracticeInGroup ];
+        })
     );
 
     return {
@@ -56,11 +59,7 @@ export function getHoursPracticedPerMonthBarChart(
                         },
                         label: (context) => {
                             const rawHours = context.parsed.y;
-                            const fullHours = Math.trunc(rawHours);
-                            const remainder = rawHours - fullHours;
-                            const minutes = Math.trunc(60 * remainder);
-
-                            return fullHours + 'h' + String(minutes).padStart(2, '0');
+                            return formatHoursForDisplay(rawHours);
                         },
                     },
                 },
@@ -70,6 +69,7 @@ export function getHoursPracticedPerMonthBarChart(
                 x: {
                     grid: {
                         display: false,
+                        drawBorder: false,
                         color: colors.chartBorder,
                     },
                     ticks: {
@@ -78,6 +78,7 @@ export function getHoursPracticedPerMonthBarChart(
                 },
                 y: {
                     grid: {
+                        drawBorder: false,
                         color: colors.chartBorder,
                     },
                     ticks: {
@@ -89,12 +90,12 @@ export function getHoursPracticedPerMonthBarChart(
     };
 }
 
-interface HoursPracticedChartProps {
+interface HoursPracticedBarChartProps {
     timeEntries: TimeEntry[];
     asana: Asana[];
 }
 
-export const HoursPracticedChart = ({ timeEntries, asana }: HoursPracticedChartProps) => {
+export const HoursPracticedBarChart = ({ timeEntries, asana }: HoursPracticedBarChartProps) => {
     const colors = useColors();
     return (
         <React.Fragment>

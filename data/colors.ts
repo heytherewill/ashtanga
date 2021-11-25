@@ -5,6 +5,7 @@ export interface Colors {
     foreground: string;
     onBackground: string;
     chartBorder: string;
+    moondays: string;
 }
 
 const getColors = (): Colors => {
@@ -14,6 +15,9 @@ const getColors = (): Colors => {
             foreground: '',
             onBackground: '',
             chartBorder: '',
+            foregroundLighter: '',
+            foregroundDarker: '',
+            moondays: '',
         };
 
     const documentElement = window.getComputedStyle(document.documentElement);
@@ -22,6 +26,7 @@ const getColors = (): Colors => {
         foreground: documentElement.getPropertyValue('--foreground').trim(),
         onBackground: documentElement.getPropertyValue('--onBackground').trim(),
         chartBorder: documentElement.getPropertyValue('--chartBorder').trim(),
+        moondays: documentElement.getPropertyValue('--moondays').trim(),
     };
 };
 

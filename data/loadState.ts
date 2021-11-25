@@ -1,14 +1,15 @@
 import React from 'react';
-import { Asana, State, TimeEntry } from '../types';
+import { Asana, Moonday, State, TimeEntry } from '../types';
 
 export const LoadState = () => {
     const [state, setState] = React.useState<State | null>(null);
 
     React.useEffect(() => {
         const fetchState = async () => {
-            const [csvAsana, csvTimeEntries] = await Promise.all([
+            const [csvAsana, csvTimeEntries, csvMoondays] = await Promise.all([
                 fetch('/asana.csv').then((res) => res.text()),
                 fetch('/practice.csv').then((res) => res.text()),
+                fetch('/moon.csv').then((res) => res.text()),
             ]);
 
             const asana: Asana[] = csvAsana.split(/\r\n|\n/).map((entry) => {
@@ -32,9 +33,20 @@ export const LoadState = () => {
                 };
             });
 
+            const moondays: Moonday[] = csvMoondays.split(/\r\n|\n/).map((entry: string) => {
+                const entryComponents = entry.split(',');
+                const date = new Date(entryComponents[0]);
+                const kind = entryComponents[1] == 'new' ? 'new' : 'full';
+                return {
+                    date: date,
+                    kind: kind,
+                };
+            });
+
             setState({
                 asana,
                 timeEntries,
+                moondays
             });
         };
         fetchState();
