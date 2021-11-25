@@ -30,7 +30,7 @@ function getTypesOfPracticeDoughnutChart(
                 {
                     data: typesOfPractice,
                     borderColor: colors.chartBorder,
-                    backgroundColor: [ colors.foreground, colors.moondays, colors.foregroundDarker ],
+                    backgroundColor: [ colors.primary, colors.secondary, colors.tertiary ],
                     hoverOffset: 4,
                 },
             ],
@@ -58,9 +58,9 @@ export const TypeOfPracticeDoughnutChart = ({timeEntries}: TypeOfPracticeDoughnu
             <h1>Types of Practice</h1>
             <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries, colors)} />
             <div className="legend">
-                <h6 className="instructed"> Instructed</h6>
-                <h6 className="solo"> Solo</h6>
-                <h6 className="guided"> Guided</h6>
+                <h5 className="instructed"> Instructed</h5>
+                <h5 className="solo"> Solo</h5>
+                <h5 className="guided"> Guided</h5>
             </div>
         </React.Fragment>
     );

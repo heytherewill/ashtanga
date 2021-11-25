@@ -72,7 +72,7 @@ function getDaysPracticedMatrixChart(
                 if (hoursPracticed == 0)
                     return colors.chartBorder;
 
-                return colorWithProportionalAlpha(colors.foreground, hoursPracticed, longestDuration);
+                return colorWithProportionalAlpha(colors.primary, hoursPracticed, longestDuration);
             },
             borderRadius: 3,
             borderWidth: 2,
@@ -83,10 +83,10 @@ function getDaysPracticedMatrixChart(
 
                 return hoursPracticed == 0
                     ? (isMoonday ? colors.moondays : colors.chartBorder)
-                    : colorWithProportionalAlpha(colors.foreground, hoursPracticed, longestDuration);
+                    : colorWithProportionalAlpha(colors.primary, hoursPracticed, longestDuration);
             },
-            hoverBackgroundColor: colors.foreground,
-            hoverBorderColor: colors.foreground,
+            hoverBackgroundColor: colors.primary,
+            hoverBorderColor: colors.primary,
             // @ts-expect-error
             width: (context) => (context.chart.chartArea || {}).width / 62,
             // @ts-expect-error

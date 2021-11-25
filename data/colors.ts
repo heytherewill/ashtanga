@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 export interface Colors {
     background: string;
-    foreground: string;
-    foregroundLighter: string;
-    foregroundDarker: string;
+    primary: string;
+    secondary: string;
+    tertiary: string;
     onBackground: string;
     chartBorder: string;
     moondays: string;
@@ -14,22 +14,22 @@ const getColors = (): Colors => {
     if (typeof window === 'undefined')
         return {
             background: '',
-            foreground: '',
+            primary: '',
+            secondary: '',
+            tertiary: '',
             onBackground: '',
             chartBorder: '',
-            foregroundLighter: '',
-            foregroundDarker: '',
             moondays: '',
         };
 
     const documentElement = window.getComputedStyle(document.documentElement);
     return {
         background: documentElement.getPropertyValue('--background').trim(),
-        foreground: documentElement.getPropertyValue('--foreground').trim(),
+        primary: documentElement.getPropertyValue('--primary').trim(),
+        secondary: documentElement.getPropertyValue('--secondary').trim(),
+        tertiary: documentElement.getPropertyValue('--tertiary').trim(),
         onBackground: documentElement.getPropertyValue('--onBackground').trim(),
         chartBorder: documentElement.getPropertyValue('--chartBorder').trim(),
-        foregroundLighter: documentElement.getPropertyValue('--foregroundLighter').trim(),
-        foregroundDarker: documentElement.getPropertyValue('--foregroundDarker').trim(),
         moondays: documentElement.getPropertyValue('--moondays').trim(),
     };
 };

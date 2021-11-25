@@ -1,11 +1,11 @@
 :root {
-    --background: #fcece4;
-    --foreground: #22b1eb;
-    --foregroundDarker: #0692cd;
-    --foregroundLighter: #42c5f8;
+    --background:   #fcece4;
+    --primary:   #22b1eb;
+    --secondary:    #22ebc1;
+    --tertiary:     #224deb;
     --onBackground: #222323;
-    --chartBorder: #555555;
-    --moondays: #D5D5BF;
+    --chartBorder:  #555555;
+    --moondays:     #D5D5BF;
     font-family: 'Zen Maru Gothic', sans-serif;
     color: var(--onBackground);
 }
@@ -22,26 +22,30 @@ h1 {
     text-align: center;
 }
 
-h6 {
-    display: inline-block;
-}
-
-h6::before {
-    content: '';
-    background: var(--foreground);
-    height: 10px;
-    width: 10px;
-    border-radius: 10px;
+h5 {
     display: inline-flex;
-    margin: 0px 10px;
 }
 
-h6.instructed::before {
-    background: var(--moondays);
+h5::before {
+    content: '';
+    background: var(--primary);
+    height: 2em;
+    width: 2em;
+    border-radius: 2em;
+    display: inline-flex;
+    margin: 0 0.5em 0 4em;
 }
 
-h6.guided::before {
-    background: var(--foregroundLighter);
+h5.instructed::before {
+    background: var(--secondary);
+}
+
+h5.guided::before {
+    background: var(--tertiary);
+}
+
+.legend {
+    margin-top: 2em;
 }
 
 #container {
