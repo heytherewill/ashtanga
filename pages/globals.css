@@ -9,7 +9,6 @@
 }
 
 html {
-    max-width: 120ch;
     padding: 3em 1em;
     margin: auto;
     line-height: 1.75;
@@ -22,7 +21,6 @@ h1 {
 }
 
 #container {
-    padding: 0px 200px;
     min-height: 100vh;
     display: grid;
     place-items: center;
