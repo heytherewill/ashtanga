@@ -56,7 +56,9 @@ export const TypeOfPracticeDoughnutChart = ({timeEntries}: TypeOfPracticeDoughnu
     return (
         <React.Fragment>
             <h1>Types of Practice</h1>
-            <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries, colors)} />
+            <div className="doughnut-container">
+                <ChartCanvas {...getTypesOfPracticeDoughnutChart(timeEntries, colors)} />
+            </div>
             <div className="legend">
                 <h5 className="instructed"> Instructed</h5>
                 <h5 className="solo"> Solo</h5>

@@ -11,10 +11,11 @@
 }
 
 html {
-    padding: 3em 1em;
     margin: auto;
+    padding: 3em 1em;
     line-height: 1.75;
     font-size: 1.25em;
+    max-width: max(1500px, 60vw);
     background: var(--background);
 }
 
@@ -48,6 +49,10 @@ h5.guided::before {
     margin-top: 2em;
 }
 
+.doughnut-container {
+    width: 80%;
+}
+
 #container {
     min-height: 100vh;
     display: grid;
@@ -58,5 +63,35 @@ h5.guided::before {
     :root {
         --background:#222323;
         --onBackground: #D3D3D3;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .doughnut-container {
+        width: 100%;
+    }
+
+    h5 {
+        margin: 0;
+    }
+
+    .legend {
+        gap: 1em;
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h5::before {
+        margin: 0 0.5em 0 1em;
+    }
+
+    #matrix-scrollbars {
+        width: 100%;
+        overflow-y: scroll;
+    }
+
+    .matrix-container {
+        width: 400%;
     }
 }

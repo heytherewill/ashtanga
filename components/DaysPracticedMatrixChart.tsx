@@ -198,7 +198,11 @@ export const DaysPracticedMatrixChart = ({ timeEntries, moondays, }: DaysPractic
     return (
         <React.Fragment>
             <h1>Days Practiced</h1>
-            <ChartCanvas {...getDaysPracticedMatrixChart(timeEntries, moondays, colors)} />
+            <div id="matrix-scrollbars">
+                <div className="matrix-container">
+                    <ChartCanvas {...getDaysPracticedMatrixChart(timeEntries, moondays, colors)} />
+                </div>
+            </div>
         </React.Fragment>
     );
 };
