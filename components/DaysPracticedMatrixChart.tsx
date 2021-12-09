@@ -160,10 +160,11 @@ function getDaysPracticedMatrixChart(
                         const moonday = moondays.find(m => isSameDay(m.date, dayOfYear))
                         const moondayInfo = moonday == undefined ? [] : [ 'This is a ' + moonday.kind + ' moon day.' ]
 
+                        const formattedDate = format(dayOfYear, 'dd-MM-yyyy');
                         const hoursPracticed = hoursPracticedPerDayOfYear[context.dataIndex] ?? 0;
                         const practiceInfo = hoursPracticed == 0 
-                            ? [ 'No practice registered for this day.' ] 
-                            : [ 'Practiced for ' + formatHoursForDisplay(hoursPracticed) ];
+                            ? [ 'No practice registered on ' + formattedDate ] 
+                            : [ formatHoursForDisplay(hoursPracticed) + ' of practice registered on ' + formattedDate + '.' ];
 
                         return moondayInfo.concat(practiceInfo);
                     }
@@ -199,7 +200,7 @@ export const DaysPracticedMatrixChart = ({ timeEntries, moondays, }: DaysPractic
         <React.Fragment>
             <h1>Days Practiced</h1>
             <div id="matrix-scrollbars">
-                <div className="matrix-container">
+                <div id="matrix-container">
                     <ChartCanvas {...getDaysPracticedMatrixChart(timeEntries, moondays, colors)} />
                 </div>
             </div>

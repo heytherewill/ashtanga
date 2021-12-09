@@ -94,7 +94,7 @@ h5.guided::before {
         overflow-y: scroll;
     }
 
-    .matrix-container {
+    #matrix-container {
         width: 400%;
     }
 }
