@@ -1,9 +1,9 @@
 :root {
-    --background:   #fcece4;
-    --primary:   #22b1eb;
+    --primary:      #22b1eb;
     --secondary:    #22ebc1;
     --tertiary:     #224deb;
-    --onBackground: #222323;
+    --background:   #222323;
+    --onBackground: #D3D3D3;
     --chartBorder:  #555555;
     --moondays:     #D5D5BF;
     font-family: 'Zen Maru Gothic', sans-serif;
@@ -63,20 +63,17 @@ h5.guided::before {
     width: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background:#222323;
-        --onBackground: #D3D3D3;
-    }
-}
-
 @media only screen and (max-width: 600px) {
-    .doughnut-container {
-        width: 100%;
-    }
-
     h5 {
         margin: 0;
+    }
+
+    h5::before {
+        margin: 0 0.5em 0 1em;
+    }
+
+    .doughnut-container {
+        width: 100%;
     }
 
     .legend {
@@ -84,10 +81,6 @@ h5.guided::before {
         width: 65%;
         display: flex;
         flex-direction: column;
-    }
-
-    h5::before {
-        margin: 0 0.5em 0 1em;
     }
 
     #matrix-scrollbars {
